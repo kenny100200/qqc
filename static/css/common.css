@@ -1,0 +1,103 @@
+view {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+.extend-click {
+	position: relative;
+}
+
+.extend-click::before {
+	content: '';
+	position: absolute;
+	top: -10px;
+	left: -10px;
+	right: -10px;
+	bottom: -10px;
+}
+
+@font-face {
+	font-family: "Barlow Medium";
+	src: url('~@/static/font/BARLOW-MEDIUM.TTF');
+}
+
+/* @font-face {
+	font-family: "Barlow Black";
+	src: url('~@/static/font/BARLOW-BLACK.TTF');
+} */
+
+/*@font-face {
+	font-family: "Barlow Bold";
+	src: url('~@/static/font/BARLOW-BOLD.TTF');
+}
+
+@font-face {
+	font-family: "Barlow Regular";
+	src: url('~@/static/font/BARLOW-REGULAR.TTF');
+} */
+
+html,
+body {
+	margin: 0 auto;
+	padding: 0;
+	font-size: 24rpx;
+	background-color: #0E1866;
+	height: 100%;
+	color: #FFFFFF;
+	position: relative;
+	font-family: "DINPro";
+}
+
+input,
+textarea {
+	margin: 0;
+	padding: 0;
+	outline: none;
+}
+
+image {
+	border: none;
+	vertical-align: middle;
+}
+
+
+uni-swiper .uni-swiper-dot{
+	width: 18rpx;
+	height: 4rpx;
+	border-radius: 2rpx !important;
+	background-color: rgba(133,142,157,0.3) !important;
+}
+uni-swiper .uni-swiper-dot-active {
+	background-color: #858E9D !important;
+	width: 18rpx !important;
+	height: 4rpx !important;
+	background: #858E9D !important;
+	border-radius: 2rpx !important;
+}
+uni-swiper .uni-swiper-dots-horizontal .uni-swiper-dot{
+	margin-right: 0rpx !important;
+}
+uni-swiper .uni-swiper-dots-horizontal{
+	bottom:20rpx
+}
+.ellipsis {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.ellipsisCol {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 2;
+	overflow: hidden;
+}
+
+

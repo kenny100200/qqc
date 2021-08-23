@@ -1,0 +1,29 @@
+{
+  "name": "qqc-app",
+  "version": "2.0.0",
+  "description": "",
+  "main": "main.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "axios-adapter-uniapp": "^0.1.1",
+    "bignumber.js": "^9.0.1",
+    "crypto-js": "^4.0.0",
+    "qs": "^6.10.1",
+    "time-formater": "^1.1.3",
+    "tronweb": "^3.2.6",
+    "vuex": "^3.6.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/asiacren/chia-web.git"
+  },
+  "author": "",
+  "license": "ISC"
+}

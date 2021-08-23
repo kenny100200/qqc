@@ -1,0 +1,112 @@
+const BigNumber = require('bignumber.js');
+const Common = require('./common');
+const ConfigInit =require('../configInit');
+const privateKey = "-";
+function getTronWeb(privateKey) {
+    return ConfigInit.getTronWeb(privateKey)
+}
+
+async function getTokenBalance(tokenAddr, holderAddr) {
+    let tronWeb = getTronWeb(privateKey);
+    tokenAddr = _get58ContractAddr(tronWeb, tokenAddr);
+    let instance = await tronWeb.contract().at(tokenAddr);
+    let balance = await instance["balanceOf"](holderAddr).call({_isConstant:true});
+    if (balance === undefined) {
+        balance = '0';
+    } else {
+        console.log(balance);
+        console.log(JSON.stringify(balance));
+        try{
+            balance = balance.balance.toString();
+            console.log("余额")
+            console.log(balance)
+        }catch(e){
+            console.error("获取余额出错了");
+            console.log(balance);
+            console.log(JSON.stringify(balance));
+            console.error(e);
+
+        }
+    }
+    return balance;
+}
+
+async function _getTokenDecimals(tokenAddr) {
+    let tronWeb = getTronWeb(privateKey);
+    tokenAddr = _get58ContractAddr(tronWeb, tokenAddr);
+    let instance = await tronWeb.contract().at(tokenAddr);
+    let decimals = await instance["decimals"]().call().catch(Common.thenCatch);
+    decimals = Number.parseInt(decimals);
+    return decimals;
+}
+
+async function _getBlockByNum(num) {
+    let tronWeb = getTronWeb(privateKey);
+    let info = await tronWeb.trx.getBlockByNumber(num).catch(Common.thenCatch)
+    if (Common.varValid(info)) {
+        return info
+    }
+    return null;
+}
+//网站上调用不要私钥，只需要获得tronweb，  例子，转代币 sendContract('私钥','代币地址','trx填0','transfer','to接收代币地址','value接收代币数量')
+async function sendContract(prikey, contractAddr, ethValue, methodStr, ...methodParams) {
+
+    ethValue = new BigNumber(ethValue).multipliedBy(1000000).toNumber()
+    let tronWeb = getTronWeb(prikey);
+    console.log(contractAddr)
+    contractAddr = tronWeb.address.fromHex(contractAddr)
+    console.log(contractAddr)
+    console.log(...methodParams)
+    return new Promise(async function (resolve, reject) {
+
+        let contract =await tronWeb.contract().at(contractAddr);
+        contract[methodStr](...methodParams).send({
+            callValue: ethValue,
+            feeLimit: 1000000000,
+            shouldPollResponse: false//是否展示结果，false展示hash, true,等待区块确认，最后返回一个true
+        }).then(function (hash) {
+            resolve(hash)
+        }).catch(function (err) {
+            reject(err)
+        });
+    })
+
+}
+
+function _get58ContractAddr(tronWeb, addr0x) {
+    return tronWeb.address.fromHex(addr0x)
+}
+
+/**
+ *
+ * @param prikey
+ * @param to
+ * @param numWei
+ * @returns {Promise<unknown>}
+ */
+async function sendTrx(prikey,to,numWei){
+
+    return new Promise( function (resolve, reject) {
+        let tronWeb = getTronWeb(prikey);
+        // let tradeobj = await tronWeb.transactionBuilder.sendTrx(to, numWei);
+        // let signedtxn =  await tronWeb.trx.sign(tradeobj, prikey);
+        tronWeb.trx.sendTransaction(to,numWei,prikey).then(function (hash) {
+            console.log(hash);
+            resolve(hash["txid"]);
+        }).catch(function (err) {
+            console.log(err)
+            reject(err);
+        });
+    })
+
+}
+
+module.exports = {
+    getTronWeb: getTronWeb,
+    sendContract: sendContract,
+    sendTrx: sendTrx,
+    getTokenBalance: getTokenBalance,
+    getTokenDecimals: _getTokenDecimals,
+    get58ContractAddr: _get58ContractAddr,
+    getBlockByNum: _getBlockByNum,
+};

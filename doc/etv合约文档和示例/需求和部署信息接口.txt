@@ -1,0 +1,144 @@
+需求，
+项目方给矿池转入50w token, 转入时，每30天为一个周期，第一个周期的释放量为31832.5个token,
+第二个周期是第一个周期数量的95%，即当下周期的量是上个周期量的95%。以此类推
+每4h或者每天结算一次收益，(当前测试以天算)
+
+个人挖矿数量 = (当前量/30) * 个人转入token占总量的份额
+公式  = 个人累计转入token / 所有人总量 / 当天产出
+
+//测试
+//测试1
+测试每天的产出量是多少， 确认是不是30个月产完
+//测试2
+一个用户质押， 查看每天的收益是不是当天收益
+一个用户质押， 查看经过2-3天后，收益是不是正好两天的收
+查看每天的总量map有没有更新
+两个用户质押，查看每天的收益是不是两个人分
+
+//测试3
+提收益后，记录该用户的提收益时间，不对多提
+
+
+
+i 0 --> 31832.5 l: 468167.5
+i 1 --> 30240.875 l: 437926.625
+i 2 --> 28728.83125 l: 409197.79375
+i 3 --> 27292.3896875 l: 381905.4040625
+i 4 --> 25927.770203124997 l: 355977.63385937497
+i 5 --> 24631.381692968745 l: 331346.25216640625
+i 6 --> 23399.812608320306 l: 307946.4395580859
+i 7 --> 22229.82197790429 l: 285716.6175801816
+i 8 --> 21118.330879009074 l: 264598.28670117253
+i 9 --> 20062.41433505862 l: 244535.8723661139
+i 10 --> 19059.293618305688 l: 225476.57874780823
+i 11 --> 18106.328937390404 l: 207370.24981041782
+i 12 --> 17201.012490520883 l: 190169.23731989693
+i 13 --> 16340.961865994837 l: 173828.27545390208
+i 14 --> 15523.913772695094 l: 158304.361681207
+i 15 --> 14747.718084060338 l: 143556.64359714667
+i 16 --> 14010.33217985732 l: 129546.31141728935
+i 17 --> 13309.815570864454 l: 116236.4958464249
+i 18 --> 12644.324792321231 l: 103592.17105410367
+i 19 --> 12012.10855270517 l: 91580.0625013985
+i 20 --> 11411.50312506991 l: 80168.55937632859
+i 21 --> 10840.927968816415 l: 69327.63140751218
+i 22 --> 10298.881570375594 l: 59028.74983713658
+i 23 --> 9783.937491856814 l: 49244.812345279766
+i 24 --> 9294.740617263973 l: 39950.07172801579
+i 25 --> 8830.003586400773 l: 31120.06814161502
+i 26 --> 8388.503407080734 l: 22731.564734534284
+i 27 --> 7969.0782367266975 l: 14762.486497807586
+i 28 --> 7570.624324890362 l: 7191.862172917224
+i 29 --> 7192.093108645843 l: -0.23093572861944267
+end: 7191.862172917224  ltotal -0.23093572861944267
+
+
+//发布的合约信息
+代币合约，精度6
+TXXubhurYenXqUerLufeyYUGY1T7NpDdPT      0xec89d7599183FA57eDFdDC072ACdbC076071dd56
+质押合约地址
+TT6qtdnmWBYPeXkhyYApdY7PGaXUB65W5s      0xbBeBd7f93448263fC481f40F074431a530b28D43
+
+界面需求
+抵押矿池ETV，  ==>系统总质押量(getSysInfo第一个返回值)
+参与人数       ==>系统总人数(getSysInfo 第四个返回值)
+全网出矿pro    ==>该数字待定(确认下是不是当日总产出)
+全网收割pro    ==>功能待定，是指的用户已经领取走的总量，还是过去的时间总产出
+
+合约地址       ==>代币地址? 待确认
+逆熵地址       ==>待确认
+
+逆熵ETV赚取PRO
+点击加入， 后的页面，需要查询是否授权，如果未授权，需要授权后才可以进行质押(先调用代币的approve方法授权给该合约，再调用该合约的stake方法进行质押)
+
+个人统计
+钱包地址       ==>当前波宝链接的地址
+我的质押       ==>当前账号历史总质押， 点击进去后的列表，查询该用户所有质押订单 (总质押量 getUser 第二个返回值)
+我的收割       ==>当前用户历史领取总收益，点击进去后的列表，查询该用户所有领取的记录 (总领取收益，getUser 第三个返回值)
+代收割         ==>查询该用户累计多少收益未领取 （getBonus方法获取，参数分别是用户地址，和getCurDayIndex获取的下标）
+收割  ==>点击领取所有未领取收益 (withdrawBonus方法领取，参数dayCount是多少天的意思，该值建议最大50， 如超50，分批次领取)
+
+列表接口暂时未提供，先对接已有接口
+
+
+
+
+代币接口abi,是标准的erc20接口
+erc20标准查看  https://www.jianshu.com/p/a5158fbfaeb9
+如果需要代币，可以调用方法增发
+minttest('地址','地址','数量')//两个地址都填目标地址，数量需要带上精度 6个0
+也可以在浏览器中调用 (阅读合约是查询方法， 编写合约是要发送交易的方法)
+https://shasta.tronscan.org/#/contract/TXXubhurYenXqUerLufeyYUGY1T7NpDdPT/code
+
+质押合约操作地址
+https://shasta.tronscan.org/#/contract/TT6qtdnmWBYPeXkhyYApdY7PGaXUB65W5s/code
+
+
+
+下面是当前已经实现的接口
+
+//质押，输入的是代币金额，主要要带精度的，  质押之前需要先
+function stake(uint256 amount) public
+
+//分批次提收益
+//参数是提多少天收益
+function withdrawBonus(uint256 _dayCount) public
+
+//这两个方法目的是每天0点后，调用一次，计算前一天的总质押量(默认每天第一笔操作也会做这个动作，不过手续费算在用户身上)
+function updateDayInfo() public
+function updateDayInfo2(uint256 count) public//这个是避免上面这个隔了太多天，分批次结算，count是天数
+
+//查询
+//获取某个用户某天的质押
+function getUserSomeDayAmount(address _addr, uint256 dayIndex, uint256 userHashIndex) public view returns (uint256, uint256, uint256)
+
+//获取某天到某天之间的收益，左闭右开
+function getReceivableBonus(address _addr, uint256 _startIndex, uint256 _endIndex) public view returns (uint256)
+
+
+//获取当前系统下标--天数
+function getCurDayIndex() public view returns (uint256)
+//根据checkPoint时间获取下标
+function getDayIndex(uint256 _checkPoint) public view returns (uint256)
+//根据天数下标，获取当前总质押量， 第二个返回值是最后变化的天数
+function getTotalHash(uint256 dayIndex) public view returns (uint256, uint256)
+//获取收益
+//参数，用户地址，天数下标  (内部是计算用户最后一次领取到当前的可领取收益)
+function getBonus(address _addr, uint256 dayIndex) public view returns (uint256)
+
+//是否有投资过， 用户总质押， 累计已提收益，用户最后操作的时间戳，用户结算收益天数的0点时间戳
+function getUser(address _addr) public view returns (uint8,  uint256, uint256, uint256, uint256)
+
+//获取用户最后的checkPoint day,和当前最新的dayIndex
+function getUserDayIndex(address _addr) public view returns (uint256, uint256)
+
+//获取每日产出量，递减，每个月递减，共30个月，金额是上个月的95%
+//第二个参数是判断是否已经结束， 如果结束后，还有人 充值进来， 也不处理
+function getDayOutAmount(uint256 passDays) public view returns (uint256, bool)
+
+//获取系统信息
+//当前总质押量,当天产出，当天第几天，开始时间,全网矿工数量
+function getSysInfo() public view returns (uint256,  uint256, uint256, uint256, uint256)
+
+//获取用户的最后结算时间，和结算时间的天数下标
+function getCheckDay(address _addr) public view returns (uint256, uint256)

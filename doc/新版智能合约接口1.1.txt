@@ -1,0 +1,38 @@
+新发布的合约信息
+-----------------------------------------
+代币ETVs，就是质押币
+合约：TPAz7wJZxUxbCH7xgH5buCtBhqq5rmvGRj      0x90d3DFb5DFaFA129bB40992B90Fc33Af3B6b1dF4
+精度：6
+
+代币ETVpros，对应的产出币
+合约：TGxCfTqcm5cmVUdaEbfH2KzQ5DyyKE7Xcf      0x4c982Eb848A76C5946AE74F2C7A6A905969EC88B
+精度：8
+//---------------------------------------
+新质押合约地址
+TTTdQYzNXgoQjVYxBgwDpVKduqNfmFvoYj      0xBFda28568CF5c92ce47fc1084df9a73CbB1e0F37
+(!!第一个版本，弃用TT6qtdnmWBYPeXkhyYApdY7PGaXUB65W5s      0xbBeBd7f93448263fC481f40F074431a530b28D43)
+
+//--------------------------------------
+合约地址：TPAz7wJZxUxbCH7xgH5buCtBhqq5rmvGRj
+逆熵地址：TTTdQYzNXgoQjVYxBgwDpVKduqNfmFvoYj 
+
+//--------------------------------------
+质押ETVs赚取ETVpros
+点击加入， 后的页面，需要查询是否授权，如果未授权，需要授权后才可以进行质押
+方法：先调用代币的approve方法授权给该合约，再调用该合约的stake方法进行质押
+//-------------------------------------
+个人统计
+钱包地址:  当前波宝链接的地址
+-------------
+我的质押:   当前账号历史总质押， 点击进去后的列表，查询该用户所有质押订单
+方法：getUser 第二个返回值
+-------------
+我的收割:  当前用户历史领取总收益，点击进去后的列表，查询该用户所有领取的记录 
+方法：getUser 第三个返回值
+-------------
+代收割   :查询该用户累计多少收益未领取 
+getBonus方法获取，参数分别是用户地址，和getCurDayIndex获取的下标
+------------
+收割按钮：点击领取所有未领取收益 
+方法：withdrawBonus方法领取，参数dayCount是多少天的意思，该值建议最大50， 如超50，分批次领取
+
